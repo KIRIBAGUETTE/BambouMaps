@@ -11,6 +11,13 @@ import Mapbox
 
 class ViewController: UIViewController, MGLMapViewDelegate, CLLocationManagerDelegate {
 
+    @IBOutlet weak var subMapView: UIView!
+    @IBOutlet weak var textFieldAddress: UITextField!
+    
+    @IBOutlet weak var textFieldAddressConstraintTop: NSLayoutConstraint!
+    @IBOutlet weak var textFieldAddressConstraintWidth: NSLayoutConstraint!
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
     
@@ -28,8 +35,16 @@ class ViewController: UIViewController, MGLMapViewDelegate, CLLocationManagerDel
         
         MBox._mapView.setCenter(position, zoomLevel: 7, direction: 0, animated: false)
         view.addSubview(MBox._mapView)
-        
+        self.gestConstraint()
+        view.addSubview(subMapView)
         PutPinClass.putAPinOnTheMap(mapView: MBox._mapView, position: position, title: "Your Position", subtitle: "This is your position")
+    }
+    
+    // Gestion des contraintes graphiques
+    
+    func gestConstraint() {
+        self.textFieldAddressConstraintTop.constant = self.subMapView.bounds.height * 15 / 100
+        self.textFieldAddressConstraintWidth.constant = self.subMapView.bounds.width * 70 / 100
     }
     
     // Activation de la possibilite de cliquer sur la pin pour afficher les informations

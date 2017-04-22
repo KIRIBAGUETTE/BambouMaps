@@ -20,12 +20,45 @@
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC" customClass="MGLMapView">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="SP9-r5-7nQ">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                <subviews>
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="sdsdfsdfsdfsfs" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ojz-B7-Dcg">
+                                        <rect key="frame" x="82" y="96" width="210" height="30"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="210" id="Xmg-Rt-hea"/>
+                                            <constraint firstAttribute="height" constant="30" id="gDa-VU-sdm"/>
+                                        </constraints>
+                                        <nil key="textColor"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                    </textField>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="ojz-B7-Dcg" firstAttribute="top" secondItem="SP9-r5-7nQ" secondAttribute="top" constant="96" id="Ylp-zG-o5L"/>
+                                    <constraint firstItem="ojz-B7-Dcg" firstAttribute="centerX" secondItem="SP9-r5-7nQ" secondAttribute="centerX" id="rgy-Pn-Clc"/>
+                                </constraints>
+                            </view>
+                        </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="SP9-r5-7nQ" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="6mP-xQ-RSd"/>
+                            <constraint firstItem="SP9-r5-7nQ" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="HrQ-Ys-qPh"/>
+                            <constraint firstAttribute="trailing" secondItem="SP9-r5-7nQ" secondAttribute="trailing" id="bzY-S2-Wva"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="SP9-r5-7nQ" secondAttribute="bottom" id="ylg-vE-IGT"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="subMapView" destination="SP9-r5-7nQ" id="Qrv-xg-53l"/>
+                        <outlet property="textFieldAddress" destination="ojz-B7-Dcg" id="nGg-r7-OQ6"/>
+                        <outlet property="textFieldAddressConstraintTop" destination="Ylp-zG-o5L" id="v1i-Xw-waY"/>
+                        <outlet property="textFieldAddressConstraintWidth" destination="Xmg-Rt-hea" id="Eed-re-iuh"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="136.80000000000001" y="138.98050974512745"/>
+            <point key="canvasLocation" x="-1106" y="122"/>
         </scene>
     </scenes>
 </document>

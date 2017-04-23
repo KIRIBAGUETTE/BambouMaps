@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		336082A14C8DD873439E891F /* Pods_BambouMaps.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5514C4F06C4D86ACA9CF238 /* Pods_BambouMaps.framework */; };
 		523065551EAD07B00075ADD3 /* MAPBOXAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 523065541EAD07B00075ADD3 /* MAPBOXAPI.swift */; };
+		523065571EAD10E40075ADD3 /* DeserialisationMapBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 523065561EAD10E40075ADD3 /* DeserialisationMapBox.swift */; };
+		523065591EAD164F0075ADD3 /* addressClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 523065581EAD164F0075ADD3 /* addressClass.swift */; };
 		52B0B2971EAA6209008557EF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52B0B2961EAA6209008557EF /* AppDelegate.swift */; };
 		52B0B2991EAA6209008557EF /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52B0B2981EAA6209008557EF /* ViewController.swift */; };
 		52B0B29C1EAA6209008557EF /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 52B0B29A1EAA6209008557EF /* Main.storyboard */; };
@@ -39,6 +41,8 @@
 
 /* Begin PBXFileReference section */
 		523065541EAD07B00075ADD3 /* MAPBOXAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MAPBOXAPI.swift; path = Model/MAPBOXAPI.swift; sourceTree = "<group>"; };
+		523065561EAD10E40075ADD3 /* DeserialisationMapBox.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DeserialisationMapBox.swift; path = Controller/DeserialisationMapBox.swift; sourceTree = "<group>"; };
+		523065581EAD164F0075ADD3 /* addressClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = addressClass.swift; sourceTree = "<group>"; };
 		52B0B2931EAA6209008557EF /* BambouMaps.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BambouMaps.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		52B0B2961EAA6209008557EF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		52B0B2981EAA6209008557EF /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -145,6 +149,7 @@
 			children = (
 				52B0B2C71EABAD7B008557EF /* MBClass.swift */,
 				523065541EAD07B00075ADD3 /* MAPBOXAPI.swift */,
+				523065581EAD164F0075ADD3 /* addressClass.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -161,6 +166,7 @@
 			children = (
 				52B0B2981EAA6209008557EF /* ViewController.swift */,
 				52B0B2C91EABB6C0008557EF /* PutPin.swift */,
+				523065561EAD10E40075ADD3 /* DeserialisationMapBox.swift */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -370,7 +376,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				523065591EAD164F0075ADD3 /* addressClass.swift in Sources */,
 				52B0B2991EAA6209008557EF /* ViewController.swift in Sources */,
+				523065571EAD10E40075ADD3 /* DeserialisationMapBox.swift in Sources */,
 				52B0B2C81EABAD7B008557EF /* MBClass.swift in Sources */,
 				52B0B2971EAA6209008557EF /* AppDelegate.swift in Sources */,
 				52B0B2CA1EABB6C0008557EF /* PutPin.swift in Sources */,

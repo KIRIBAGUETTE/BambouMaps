@@ -9,6 +9,7 @@
 import UIKit
 import Mapbox
 import Alamofire
+import SwiftyJSON
 
 class ViewController: UIViewController, MGLMapViewDelegate, CLLocationManagerDelegate, UITextFieldDelegate {
 
@@ -16,6 +17,7 @@ class ViewController: UIViewController, MGLMapViewDelegate, CLLocationManagerDel
     @IBOutlet weak var textFieldAddress: UITextField!
     @IBOutlet weak var textFieldAddressConstraintTop: NSLayoutConstraint!
     @IBOutlet weak var textFieldAddressConstraintWidth: NSLayoutConstraint!
+    var stockAddress:[Int:addressClass] = [:]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,12 +40,15 @@ class ViewController: UIViewController, MGLMapViewDelegate, CLLocationManagerDel
     }
     
     func textFieldDidChange(_ textField: UITextField) {
+        
+        let DeserialisationMapBoxClass:DeserialisationMapBox = DeserialisationMapBox()
+        
         if (textField.text?.characters.count)! > 4 {
             let request:String = MAPBOXAPI.MAPBOX_AUTOCOMPLETE.rawValue + textField.text!.replacingOccurrences(of: " ", with: "%20") + ".json?access_token=" + MAPBOXAPI.KEYDEV.rawValue
             Alamofire.request(request, method: .get).responseJSON { response in
                 if response.result.isSuccess {
-                    print(response.response?.statusCode)
-                    print(response.result.value)
+                    self.stockAddress = DeserialisationMapBoxClass.DeserialisationMapBoxAutocomplete(Json: JSON(response.result.value!))
+                    
                 } else {
                     print("ERROR")
                 }

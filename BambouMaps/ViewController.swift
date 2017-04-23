@@ -19,10 +19,11 @@ class ViewController: UIViewController, MGLMapViewDelegate, CLLocationManagerDel
     @IBOutlet weak var textFieldAddressConstraintWidth: NSLayoutConstraint!
     @IBOutlet weak var tableAddressConstraintWidth: NSLayoutConstraint!
     @IBOutlet weak var tableAddressConstraintHeight: NSLayoutConstraint!
+    var sizeCell:CGFloat!
     
     let PutPinClass:PutPin = PutPin()
     
-    var sizeCell:Int = 50
+    var DidUserMovedMaps:Int = 1 // Permettre d'éviter qu'on voit la pin se déplacer lorsqu'un user cherche une adresse lointaine // 1 = PIN bouge / 0 = PIN ne bouge pas
     
     @IBOutlet weak var tableAddress: UITableView!
     var stockAddress:[Int:addressClass] = [:]
@@ -49,10 +50,30 @@ class ViewController: UIViewController, MGLMapViewDelegate, CLLocationManagerDel
         self.PutPinClass.putAPinOnTheMap(mapView: self.mapView, position: position, title: "Your Position", subtitle: "This is your position")
     }
     
+    // Recherche de l'adresse quand on arrête de déplacer la caméra à la main
+    
+    func mapView(_ mapView: MGLMapView, regionDidChangeAnimated animated: Bool) {
+        
+        self.getAddressFromMapBox(addressName: String(self.mapView.centerCoordinate.longitude) + "%2C" + String(self.mapView.centerCoordinate.latitude), types:"address", autocomplete:"false", limit:"1")
+        if self.stockAddress.count > 0 {
+            self.textFieldAddress.text = self.stockAddress[0]?._place_name
+        }
+        self.DidUserMovedMaps = 1
+    }
+    
+    // Déplacement de la pin quand on déplace la caméra à la main
+    
+    func mapViewRegionIsChanging(_ mapView: MGLMapView) {
+        if self.DidUserMovedMaps == 1 {
+            self.PutPinClass.putAPinOnTheMap(mapView: self.mapView, position: self.mapView.centerCoordinate, title: "", subtitle: "")
+        }
+    }
+    
     // Gestion de la table qui affiche les adresses de l'autocomplete
     
     func tableView(_ tableView: UITableView, didSelectRowAtIndexPath indexPath: IndexPath) {
 
+        self.DidUserMovedMaps = 0
         let position:CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: (self.stockAddress[indexPath.row]?.lattitude)!, longitude: (self.stockAddress[indexPath.row]?.longitude)!)
         self.PutPinClass.putAPinOnTheMap(mapView: self.mapView, position: position, title: (self.stockAddress[indexPath.row]?._place_name)!, subtitle: "")
         let camera = MGLMapCamera(lookingAtCenter: position, fromDistance: 4500, pitch: 15, heading: 180)
@@ -83,25 +104,39 @@ class ViewController: UIViewController, MGLMapViewDelegate, CLLocationManagerDel
     
     // Appel à l'API de Mapbox si on a au moins X caractères dans le textfield
     
-    func textFieldDidChange(_ textField: UITextField) {
+    func getAddressFromMapBox(addressName:String,
+                              types:String,
+                              autocomplete:String,
+                              limit:String) {
+        
         let DeserialisationMapBoxClass:DeserialisationMapBox = DeserialisationMapBox()
         
-        if (textField.text?.characters.count)! > 4 {
-            self.tableAddress.isHidden = false
-            let request:String = MAPBOXAPI.MAPBOX_AUTOCOMPLETE.rawValue + textField.text!.replacingOccurrences(of: " ", with: "%20") + ".json?access_token=" + MAPBOXAPI.KEYDEV.rawValue + "&types=address&autocomplete=true"
-            Alamofire.request(request, method: .get).responseJSON { response in
-                if response.result.isSuccess {
-                    if response.response?.statusCode == 200 {
-                        self.stockAddress = DeserialisationMapBoxClass.DeserialisationMapBoxAutocomplete(Json: JSON(response.result.value!))
+        let request:String = MAPBOXAPI.MAPBOX_AUTOCOMPLETE.rawValue + addressName.replacingOccurrences(of: " ", with: "%20") + ".json?access_token=" + MAPBOXAPI.KEYDEV.rawValue + "&types=" + types + "&autocomplete=" + autocomplete + "&limit=" + limit
+        Alamofire.request(request, method: .get).responseJSON { response in
+            if response.result.isSuccess {
+                if response.response?.statusCode == 200 {
+                    self.stockAddress = DeserialisationMapBoxClass.DeserialisationMapBoxAutocomplete(Json: JSON(response.result.value!))
+                    if self.stockAddress.count > 0 && autocomplete == "true"{
                         self.tableAddress.reloadData()
                         self.gestConstraint()
+                        self.tableAddress.isHidden = false
                     } else {
-                        print("ERROR RETOUR MAPBOX : " + String(describing: response.response?.statusCode))
+                        self.tableAddress.isHidden = true
                     }
                 } else {
-                    print("ERROR MAPBOX")
+                    print("ERROR RETOUR MAPBOX : " + String(describing: response.response?.statusCode))
                 }
+            } else {
+                print("ERROR MAPBOX")
             }
+        }
+    }
+    
+    // Recherche de l'adresse quand un user écrit dans la textfield
+    
+    func textFieldDidChange(_ textField: UITextField) {
+        if (textField.text?.characters.count)! > 4 {
+            self.getAddressFromMapBox(addressName: textFieldAddress.text!, types:"address", autocomplete:"true", limit:"5")
         } else {
             self.tableAddress.isHidden = true
         }
@@ -119,9 +154,10 @@ class ViewController: UIViewController, MGLMapViewDelegate, CLLocationManagerDel
     
     func gestConstraint() {
         self.textFieldAddressConstraintTop.constant = self.mapView.bounds.height * 15 / 100
-        self.textFieldAddressConstraintWidth.constant = self.mapView.bounds.width * 70 / 100
-        self.tableAddressConstraintWidth.constant = self.mapView.bounds.width * 70 / 100
-        self.tableAddressConstraintHeight.constant = CGFloat(self.sizeCell * self.stockAddress.count)
+        self.textFieldAddressConstraintWidth.constant = self.mapView.bounds.width * 80 / 100
+        self.tableAddressConstraintWidth.constant = self.mapView.bounds.width * 80 / 100
+        self.sizeCell = self.mapView.bounds.height * 7 / 100
+        self.tableAddressConstraintHeight.constant = self.sizeCell * CGFloat(self.stockAddress.count)
     }
     
     // Activation de la possibilite de cliquer sur la pin pour afficher les informations
@@ -146,16 +182,16 @@ class ViewController: UIViewController, MGLMapViewDelegate, CLLocationManagerDel
         mapView.setCamera(camera, withDuration: 3, animationTimingFunction: CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut))
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-
     // Fermeture du clavier quand on clique sur done
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
+    }
+    
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
     }
 }
 

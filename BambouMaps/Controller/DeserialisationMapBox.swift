@@ -10,6 +10,9 @@ import Foundation
 import SwiftyJSON
 
 class DeserialisationMapBox {
+    
+    // Deserialisation du retour de MapBox lors de l'autocompletion si on a un retour positif
+    
     func DeserialisationMapBoxAutocomplete(Json:JSON) -> [Int:addressClass] {
         
         var stockAddress:[Int:addressClass] = [:]

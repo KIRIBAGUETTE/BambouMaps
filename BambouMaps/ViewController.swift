@@ -39,18 +39,22 @@ class ViewController: UIViewController, MGLMapViewDelegate, CLLocationManagerDel
         PutPinClass.putAPinOnTheMap(mapView: self.mapView, position: position, title: "Your Position", subtitle: "This is your position")
     }
     
+    // Appel à l'API de Mapbox si on a au moins X caractères dans le textfield
+    
     func textFieldDidChange(_ textField: UITextField) {
-        
         let DeserialisationMapBoxClass:DeserialisationMapBox = DeserialisationMapBox()
         
         if (textField.text?.characters.count)! > 4 {
             let request:String = MAPBOXAPI.MAPBOX_AUTOCOMPLETE.rawValue + textField.text!.replacingOccurrences(of: " ", with: "%20") + ".json?access_token=" + MAPBOXAPI.KEYDEV.rawValue
             Alamofire.request(request, method: .get).responseJSON { response in
                 if response.result.isSuccess {
-                    self.stockAddress = DeserialisationMapBoxClass.DeserialisationMapBoxAutocomplete(Json: JSON(response.result.value!))
-                    
+                    if response.response?.statusCode == 200 {
+                        self.stockAddress = DeserialisationMapBoxClass.DeserialisationMapBoxAutocomplete(Json: JSON(response.result.value!))
+                    } else {
+                        print("ERROR RETOUR MAPBOX : " + String(describing: response.response?.statusCode))
+                    }
                 } else {
-                    print("ERROR")
+                    print("ERROR MAPBOX")
                 }
             }
         }

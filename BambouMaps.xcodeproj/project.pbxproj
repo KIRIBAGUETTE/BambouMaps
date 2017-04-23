@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		336082A14C8DD873439E891F /* Pods_BambouMaps.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5514C4F06C4D86ACA9CF238 /* Pods_BambouMaps.framework */; };
+		523065551EAD07B00075ADD3 /* MAPBOXAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 523065541EAD07B00075ADD3 /* MAPBOXAPI.swift */; };
 		52B0B2971EAA6209008557EF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52B0B2961EAA6209008557EF /* AppDelegate.swift */; };
 		52B0B2991EAA6209008557EF /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52B0B2981EAA6209008557EF /* ViewController.swift */; };
 		52B0B29C1EAA6209008557EF /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 52B0B29A1EAA6209008557EF /* Main.storyboard */; };
@@ -16,7 +18,6 @@
 		52B0B2B71EAA6209008557EF /* BambouMapsUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52B0B2B61EAA6209008557EF /* BambouMapsUITests.swift */; };
 		52B0B2C81EABAD7B008557EF /* MBClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52B0B2C71EABAD7B008557EF /* MBClass.swift */; };
 		52B0B2CA1EABB6C0008557EF /* PutPin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52B0B2C91EABB6C0008557EF /* PutPin.swift */; };
-		E7D7D6439B58C89867ED4EBD /* libPods-BambouMaps.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3CD84018D3C2904DAB7ADC0A /* libPods-BambouMaps.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -37,7 +38,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		3CD84018D3C2904DAB7ADC0A /* libPods-BambouMaps.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-BambouMaps.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		523065541EAD07B00075ADD3 /* MAPBOXAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MAPBOXAPI.swift; path = Model/MAPBOXAPI.swift; sourceTree = "<group>"; };
 		52B0B2931EAA6209008557EF /* BambouMaps.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BambouMaps.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		52B0B2961EAA6209008557EF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		52B0B2981EAA6209008557EF /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -54,6 +55,7 @@
 		52B0B2C71EABAD7B008557EF /* MBClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MBClass.swift; path = Model/MBClass.swift; sourceTree = "<group>"; };
 		52B0B2C91EABB6C0008557EF /* PutPin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PutPin.swift; path = Controller/PutPin.swift; sourceTree = "<group>"; };
 		D158C52E6CF99AF1D54DB91A /* Pods-BambouMaps.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BambouMaps.debug.xcconfig"; path = "Pods/Target Support Files/Pods-BambouMaps/Pods-BambouMaps.debug.xcconfig"; sourceTree = "<group>"; };
+		F5514C4F06C4D86ACA9CF238 /* Pods_BambouMaps.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BambouMaps.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F93A2A69742CEE351758B3E3 /* Pods-BambouMaps.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BambouMaps.release.xcconfig"; path = "Pods/Target Support Files/Pods-BambouMaps/Pods-BambouMaps.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -62,7 +64,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E7D7D6439B58C89867ED4EBD /* libPods-BambouMaps.a in Frameworks */,
+				336082A14C8DD873439E891F /* Pods_BambouMaps.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -142,6 +144,7 @@
 			isa = PBXGroup;
 			children = (
 				52B0B2C71EABAD7B008557EF /* MBClass.swift */,
+				523065541EAD07B00075ADD3 /* MAPBOXAPI.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -174,7 +177,7 @@
 		F4E5454936E9F91E6F1ADF5A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				3CD84018D3C2904DAB7ADC0A /* libPods-BambouMaps.a */,
+				F5514C4F06C4D86ACA9CF238 /* Pods_BambouMaps.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -371,6 +374,7 @@
 				52B0B2C81EABAD7B008557EF /* MBClass.swift in Sources */,
 				52B0B2971EAA6209008557EF /* AppDelegate.swift in Sources */,
 				52B0B2CA1EABB6C0008557EF /* PutPin.swift in Sources */,
+				523065551EAD07B00075ADD3 /* MAPBOXAPI.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

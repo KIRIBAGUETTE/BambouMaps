@@ -8,6 +8,7 @@
 
 import UIKit
 import Mapbox
+import Alamofire
 
 class ViewController: UIViewController, MGLMapViewDelegate, CLLocationManagerDelegate, UITextFieldDelegate {
 
@@ -23,6 +24,7 @@ class ViewController: UIViewController, MGLMapViewDelegate, CLLocationManagerDel
         let PutPinClass:PutPin = PutPin()
         
         self.textFieldAddress.delegate = self
+        self.textFieldAddress.addTarget(self, action: #selector(self.textFieldDidChange(_:)), for: UIControlEvents.editingChanged)
         self.configLocation(MBox:MBox)
         
         var position:CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: 48.8414, longitude: 2.2530)
@@ -33,6 +35,20 @@ class ViewController: UIViewController, MGLMapViewDelegate, CLLocationManagerDel
         self.mapView.setCenter(position, zoomLevel: 12, direction: 0, animated: false)
         self.gestConstraint()
         PutPinClass.putAPinOnTheMap(mapView: self.mapView, position: position, title: "Your Position", subtitle: "This is your position")
+    }
+    
+    func textFieldDidChange(_ textField: UITextField) {
+        if (textField.text?.characters.count)! > 4 {
+            let request:String = MAPBOXAPI.MAPBOX_AUTOCOMPLETE.rawValue + textField.text!.replacingOccurrences(of: " ", with: "%20") + ".json?access_token=" + MAPBOXAPI.KEYDEV.rawValue
+            Alamofire.request(request, method: .get).responseJSON { response in
+                if response.result.isSuccess {
+                    print(response.response?.statusCode)
+                    print(response.result.value)
+                } else {
+                    print("ERROR")
+                }
+            }
+        }
     }
     
     // Configuration de la map

@@ -49,6 +49,8 @@ class ViewController: UIViewController, MGLMapViewDelegate, CLLocationManagerDel
         self.PutPinClass.putAPinOnTheMap(mapView: self.mapView, position: position, title: "Your Position", subtitle: "This is your position")
     }
     
+    // Gestion de la table qui affiche les adresses de l'autocomplete
+    
     func tableView(_ tableView: UITableView, didSelectRowAtIndexPath indexPath: IndexPath) {
 
         let position:CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: (self.stockAddress[indexPath.row]?.lattitude)!, longitude: (self.stockAddress[indexPath.row]?.longitude)!)

@@ -11,19 +11,7 @@ import Mapbox
 
 class MBClass : NSObject, CLLocationManagerDelegate, MGLMapViewDelegate {
     var _locationManager:CLLocationManager!
-    var _mapView:MGLMapView!
-    
-    var mapView:MGLMapView {
-        set {
-            _mapView.styleURL = MGLStyle.outdoorsStyleURL(withVersion: 9)
-            _mapView.showsUserLocation = true
-        }
         
-        get {
-            return _mapView
-        }
-    }
-    
     var locationManager:CLLocationManager {
         set {
             }
@@ -31,9 +19,5 @@ class MBClass : NSObject, CLLocationManagerDelegate, MGLMapViewDelegate {
         get {
             return _locationManager
         }
-    }
-    
-    init(view:UIView) {
-        self._mapView = MGLMapView(frame: view.bounds)
     }
 }

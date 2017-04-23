@@ -9,42 +9,45 @@
 import UIKit
 import Mapbox
 
-class ViewController: UIViewController, MGLMapViewDelegate, CLLocationManagerDelegate {
+class ViewController: UIViewController, MGLMapViewDelegate, CLLocationManagerDelegate, UITextFieldDelegate {
 
-    @IBOutlet weak var subMapView: UIView!
+    @IBOutlet var mapView: MGLMapView!
     @IBOutlet weak var textFieldAddress: UITextField!
-    
     @IBOutlet weak var textFieldAddressConstraintTop: NSLayoutConstraint!
     @IBOutlet weak var textFieldAddressConstraintWidth: NSLayoutConstraint!
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
     
-        let MBox:MBClass = MBClass(view: view)
+        let MBox:MBClass = MBClass()
         let PutPinClass:PutPin = PutPin()
         
-        MBox._mapView.delegate = self
-
+        self.textFieldAddress.delegate = self
         self.configLocation(MBox:MBox)
-
+        
         var position:CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: 48.8414, longitude: 2.2530)
         if MBox._locationManager.location != nil {
             position = (MBox._locationManager.location?.coordinate)!
         }
         
-        MBox._mapView.setCenter(position, zoomLevel: 7, direction: 0, animated: false)
-        view.addSubview(MBox._mapView)
+        self.mapView.setCenter(position, zoomLevel: 12, direction: 0, animated: false)
         self.gestConstraint()
-        view.addSubview(subMapView)
-        PutPinClass.putAPinOnTheMap(mapView: MBox._mapView, position: position, title: "Your Position", subtitle: "This is your position")
+        PutPinClass.putAPinOnTheMap(mapView: self.mapView, position: position, title: "Your Position", subtitle: "This is your position")
+    }
+    
+    // Configuration de la map
+    
+    func gestMaps() {
+        self.mapView.styleURL = MGLStyle.outdoorsStyleURL(withVersion: 9)
+        self.mapView.showsUserLocation = true
+        
     }
     
     // Gestion des contraintes graphiques
     
     func gestConstraint() {
-        self.textFieldAddressConstraintTop.constant = self.subMapView.bounds.height * 15 / 100
-        self.textFieldAddressConstraintWidth.constant = self.subMapView.bounds.width * 70 / 100
+        self.textFieldAddressConstraintTop.constant = self.mapView.bounds.height * 15 / 100
+        self.textFieldAddressConstraintWidth.constant = self.mapView.bounds.width * 70 / 100
     }
     
     // Activation de la possibilite de cliquer sur la pin pour afficher les informations
@@ -62,9 +65,9 @@ class ViewController: UIViewController, MGLMapViewDelegate, CLLocationManagerDel
         MBox._locationManager.requestWhenInUseAuthorization()
     }
     
-    // Action à effectuer après la fin du chargement de la carte
+    // Action à effectuer après la fin du chargement de la vue
     
-    func mapViewDidFinishLoadingMap(_ mapView: MGLMapView) {
+    override func viewDidAppear(_ animated: Bool) {
         let camera = MGLMapCamera(lookingAtCenter: mapView.centerCoordinate, fromDistance: 4500, pitch: 15, heading: 180)
         mapView.setCamera(camera, withDuration: 3, animationTimingFunction: CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut))
     }
@@ -74,6 +77,11 @@ class ViewController: UIViewController, MGLMapViewDelegate, CLLocationManagerDel
         // Dispose of any resources that can be recreated.
     }
 
-
+    // Fermeture du clavier quand on clique sur done
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
 }
 

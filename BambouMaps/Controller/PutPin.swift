@@ -12,13 +12,14 @@ import Mapbox
 class PutPin : NSObject, MGLMapViewDelegate, CLLocationManagerDelegate {
     
     // Positionnement d'une pin sur la carte
+    let pin:MGLPointAnnotation = MGLPointAnnotation()
     
     func putAPinOnTheMap(mapView:MGLMapView, position:CLLocationCoordinate2D, title:String, subtitle:String) {
-        let pin:MGLPointAnnotation = MGLPointAnnotation()
-        pin.coordinate = position
-        pin.title = title
-        pin.subtitle = subtitle
-        mapView.addAnnotation(pin)
+        
+        self.pin.coordinate = position
+        self.pin.title = title
+        self.pin.subtitle = subtitle
+        mapView.addAnnotation(self.pin)
     }
     
 }

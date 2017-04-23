@@ -10,8 +10,8 @@ import Foundation
 
 class addressClass {
     var _place_name:String!
-    var _lattitude:Float!
-    var _longitude:Float!
+    var _lattitude:Double!
+    var _longitude:Double!
     var _id:String
     
     var place_name:String {
@@ -23,7 +23,7 @@ class addressClass {
         }
     }
     
-    var lattitude:Float {
+    var lattitude:Double {
         set {
             
         }
@@ -32,7 +32,7 @@ class addressClass {
         }
     }
     
-    var longitude:Float {
+    var longitude:Double {
         set {
             
         }
@@ -50,7 +50,7 @@ class addressClass {
         }
     }
     
-    init(place_name:String, lattitude:Float, longitude:Float, id:String) {
+    init(place_name:String, lattitude:Double, longitude:Double, id:String) {
         self._place_name = place_name
         self._longitude = lattitude
         self._longitude = longitude

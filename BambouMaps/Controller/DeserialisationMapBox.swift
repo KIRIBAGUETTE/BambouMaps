@@ -26,11 +26,11 @@ class DeserialisationMapBox {
                 if let place_name = address["place_name"].string {
                     addressUnit._place_name = place_name
                 }
-                if let lattitude = address["geometry"]["coordinates"][0].float {
-                    addressUnit._lattitude = lattitude
-                }
-                if let longitude = address["geometry"]["coordinates"][1].float {
+                if let longitude = address["geometry"]["coordinates"][0].double {
                     addressUnit._longitude = longitude
+                }
+                if let lattitude = address["geometry"]["coordinates"][1].double {
+                    addressUnit._lattitude = lattitude
                 }
                 stockAddress[stockAddress.count] = addressUnit
             }

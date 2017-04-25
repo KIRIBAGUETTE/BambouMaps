@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		336082A14C8DD873439E891F /* Pods_BambouMaps.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5514C4F06C4D86ACA9CF238 /* Pods_BambouMaps.framework */; };
+		5202A3E71EAFBBBD00AD07BF /* gestionMaps.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5202A3E61EAFBBBD00AD07BF /* gestionMaps.swift */; };
 		523065551EAD07B00075ADD3 /* MAPBOXAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 523065541EAD07B00075ADD3 /* MAPBOXAPI.swift */; };
 		523065571EAD10E40075ADD3 /* DeserialisationMapBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 523065561EAD10E40075ADD3 /* DeserialisationMapBox.swift */; };
 		523065591EAD164F0075ADD3 /* addressClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 523065581EAD164F0075ADD3 /* addressClass.swift */; };
@@ -43,6 +44,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		5202A3E61EAFBBBD00AD07BF /* gestionMaps.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = gestionMaps.swift; path = View/gestionMaps.swift; sourceTree = "<group>"; };
 		523065541EAD07B00075ADD3 /* MAPBOXAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MAPBOXAPI.swift; path = Model/MAPBOXAPI.swift; sourceTree = "<group>"; };
 		523065561EAD10E40075ADD3 /* DeserialisationMapBox.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DeserialisationMapBox.swift; path = Controller/DeserialisationMapBox.swift; sourceTree = "<group>"; };
 		523065581EAD164F0075ADD3 /* addressClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = addressClass.swift; sourceTree = "<group>"; };
@@ -174,6 +176,7 @@
 			isa = PBXGroup;
 			children = (
 				5230655A1EAD25DC0075ADD3 /* CELL ADDRESS */,
+				5202A3E61EAFBBBD00AD07BF /* gestionMaps.swift */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -402,6 +405,7 @@
 				523065631EAD70900075ADD3 /* BambouMaps.xcdatamodeld in Sources */,
 				52B0B2CA1EABB6C0008557EF /* PutPin.swift in Sources */,
 				5230655D1EAD25FF0075ADD3 /* TableViewCellAddress.swift in Sources */,
+				5202A3E71EAFBBBD00AD07BF /* gestionMaps.swift in Sources */,
 				523065551EAD07B00075ADD3 /* MAPBOXAPI.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

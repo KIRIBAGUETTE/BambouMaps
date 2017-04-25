@@ -25,15 +25,16 @@ class ViewController: UIViewController, MGLMapViewDelegate, CLLocationManagerDel
     @IBOutlet weak var tableMenu: UITableView!
     
     var stockAddress:[Int:addressClass] = [:]
-    var archiveAddress:[Int:addressClass] = [:]
-    let PutPinClass:PutPin = PutPin()
-    var gestionMapsClass:gestionMaps = gestionMaps()
+    
+    let gestionMapsControllerClass:gestionMapsController = gestionMapsController()
+    var gestionMapsViewClass:gestionMapsView = gestionMapsView()
+    var gestionDatabaseClass:gestionDatabase = gestionDatabase()
     var sizeCell:CGFloat!
     var DidUserMovedMaps:Int = 1 // Permettre d'éviter qu'on voit la pin se déplacer lorsqu'un user cherche une adresse lointaine // 1 = PIN bouge / 0 = PIN ne bouge pas
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.getAddressFromDatabase()
+        self.gestionDatabaseClass.getAddressFromDatabase()
         
         let TableViewCellAddress = UINib(nibName: "TableViewCellAddress", bundle: nil)
         self.tableAddress.register(TableViewCellAddress, forCellReuseIdentifier: "ADDRESS")
@@ -51,7 +52,7 @@ class ViewController: UIViewController, MGLMapViewDelegate, CLLocationManagerDel
         
         self.mapView.setCenter(position, zoomLevel: 12, direction: 0, animated: false)
         self.gestConstraint()
-        self.gestionMapsClass.gestMaps(mapView: mapView)
+        self.gestionMapsViewClass.configMaps(mapView: mapView)
     }
     
     // Ouverture de l'historique des adresses
@@ -66,48 +67,15 @@ class ViewController: UIViewController, MGLMapViewDelegate, CLLocationManagerDel
         self.menuView.isHidden = true
     }
     
-    // Recuperer toutes les adresses dans la base de données
-    
-    func getAddressFromDatabase() {
-        print("Get Addresses")
-        let appDelegate:AppDelegate = UIApplication.shared.delegate as! AppDelegate
-        let context = appDelegate.persistentContainer.viewContext
-        let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Address")
-        request.returnsObjectsAsFaults = false
-        do {
-            let results = try context.fetch(request)
-            if results.count > 0 {
-                self.archiveAddress.removeAll()
-                for result in results as! [NSManagedObject] {
-                    let newAddress:addressClass = addressClass()
-                    if let id = result.value(forKey: "id") as? String {
-                        newAddress._id = id
-                    }
-                    if let longitude = result.value(forKey: "longitude") as? Double {
-                        newAddress._longitude = longitude
-                    }
-                    if let lattitude = result.value(forKey: "lattitude") as? Double {
-                        newAddress._lattitude = lattitude
-                    }
-                    if let place_name = result.value(forKey: "place_name") as? String {
-                        newAddress._place_name = place_name
-                    }
-                    self.archiveAddress[archiveAddress.count] = newAddress
-                }
-            }
-        } catch {
-            print("Error during acces to the database")
-        }
-    }
-    
     // Recherche de l'adresse quand on arrête de déplacer la caméra à la main
     
     func mapView(_ mapView: MGLMapView, regionDidChangeAnimated animated: Bool) {
         self.getAddressFromMapBox(addressName: String(self.mapView.centerCoordinate.longitude) + "%2C" + String(self.mapView.centerCoordinate.latitude), types:"address", autocomplete:"false", limit:"1")
         if self.stockAddress.count > 0 {
             self.textFieldAddress.text = self.stockAddress[0]?._place_name
-            self.insertAddressInArchive(addressToArchive: self.stockAddress[0]!)
-            self.PutPinClass.putAPinOnTheMap(mapView: self.mapView, position: self.mapView.centerCoordinate, title: self.textFieldAddress.text!, subtitle: "")
+            self.gestionDatabaseClass.insertAddressInArchive(addressToArchive: self.stockAddress[0]!)
+            self.tableMenu.reloadData()
+            self.gestionMapsControllerClass.putAPinOnTheMap(mapView: self.mapView, position: self.mapView.centerCoordinate, title: self.textFieldAddress.text!, subtitle: "")
         }
         self.DidUserMovedMaps = 1
     }
@@ -116,7 +84,7 @@ class ViewController: UIViewController, MGLMapViewDelegate, CLLocationManagerDel
     
     func mapViewRegionIsChanging(_ mapView: MGLMapView) {
         if self.DidUserMovedMaps == 1 {
-            self.PutPinClass.putAPinOnTheMap(mapView: self.mapView, position: self.mapView.centerCoordinate, title: self.textFieldAddress.text!, subtitle: "")
+            self.gestionMapsControllerClass.putAPinOnTheMap(mapView: self.mapView, position: self.mapView.centerCoordinate, title: self.textFieldAddress.text!, subtitle: "")
         }
     }
     
@@ -124,12 +92,13 @@ class ViewController: UIViewController, MGLMapViewDelegate, CLLocationManagerDel
     
     func moveCameraAndPutAPin(stockAddress:[Int:addressClass], id: Int) {
         let position:CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: (stockAddress[id]?._lattitude)!, longitude: (stockAddress[id]?._longitude)!)
-        self.PutPinClass.putAPinOnTheMap(mapView: self.mapView, position: position, title: (stockAddress[id]?._place_name)!, subtitle: "")
+        self.gestionMapsControllerClass.putAPinOnTheMap(mapView: self.mapView, position: position, title: (stockAddress[id]?._place_name)!, subtitle: "")
         let camera = MGLMapCamera(lookingAtCenter: position, fromDistance: 4500, pitch: 15, heading: 180)
         mapView.setCamera(camera, withDuration: 3, animationTimingFunction: CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut))
         self.textFieldAddress.text = (stockAddress[id]?._place_name)!
         self.textFieldAddress.resignFirstResponder()
-        self.insertAddressInArchive(addressToArchive: stockAddress[id]!)
+        self.gestionDatabaseClass.insertAddressInArchive(addressToArchive: stockAddress[id]!)
+        self.tableMenu.reloadData()
     }
     
     // Gestion de la table qui affiche les adresses de l'autocomplete
@@ -144,7 +113,7 @@ class ViewController: UIViewController, MGLMapViewDelegate, CLLocationManagerDel
         } else {
             self.DidUserMovedMaps = 0
             self.menuView.isHidden = true
-            self.moveCameraAndPutAPin(stockAddress: self.archiveAddress, id: indexPath.row)
+            self.moveCameraAndPutAPin(stockAddress: self.gestionDatabaseClass.archiveAddress, id: indexPath.row)
         }
     }
     
@@ -154,7 +123,7 @@ class ViewController: UIViewController, MGLMapViewDelegate, CLLocationManagerDel
         if tableView.tag == 10 {
             return self.stockAddress.count
         } else {
-            return self.archiveAddress.count
+            return self.gestionDatabaseClass.archiveAddress.count
         }
     }
     
@@ -187,7 +156,7 @@ class ViewController: UIViewController, MGLMapViewDelegate, CLLocationManagerDel
             return cell
         } else {
             let cell:TableViewCellAddress = self.tableMenu.dequeueReusableCell(withIdentifier: "ADDRESS") as! TableViewCellAddress
-            cell.textLabel?.text = self.archiveAddress[indexPath.row]?._place_name
+            cell.textLabel?.text = self.gestionDatabaseClass.archiveAddress[indexPath.row]?._place_name
             return cell
 
         }
@@ -212,7 +181,7 @@ class ViewController: UIViewController, MGLMapViewDelegate, CLLocationManagerDel
                         self.gestConstraint()
                         self.tableAddress.isHidden = false
                     } else {
-                        self.PutPinClass.putAPinOnTheMap(mapView: self.mapView, position: self.mapView.centerCoordinate, title: (self.stockAddress[0]?._place_name)!, subtitle: "")
+                        self.gestionMapsControllerClass.putAPinOnTheMap(mapView: self.mapView, position: self.mapView.centerCoordinate, title: (self.stockAddress[0]?._place_name)!, subtitle: "")
                         self.textFieldAddress.text = self.stockAddress[0]?._place_name
                         self.tableAddress.isHidden = true
                     }
@@ -268,56 +237,8 @@ class ViewController: UIViewController, MGLMapViewDelegate, CLLocationManagerDel
         mapView.setCamera(camera, withDuration: 3, animationTimingFunction: CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut))
     }
     
-    // Verifier a chaque entree si on a 15 entrées si oui on supprime la première
-    
-    func checkNumberOfAddressesInBdd() {
-        let appDelegate:AppDelegate = UIApplication.shared.delegate as! AppDelegate
-        let context = appDelegate.persistentContainer.viewContext
-        let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Address")
-        request.returnsObjectsAsFaults = false
-        do {
-            let results = try context.fetch(request)
-            var i:Int = 0
-            if results.count >= 15 {
-                print("Delete Oldest Entry")
-                for result in results as! [NSManagedObject] {
-                    if i == 0 {
-                        context.delete(result)
-                        i = 1
-                    }
-                }
-            }
-        } catch {
-            print("ERROR")
-        }
-        do {
-            try context.save()
-        } catch {
-            print("Error")
-        }
-    }
-    
-    // Sauvegarder dans la BDD l'adresse que l'on a pointé
-    
-    func insertAddressInArchive(addressToArchive:addressClass) {
-        self.checkNumberOfAddressesInBdd()
-        let appDelegate:AppDelegate = UIApplication.shared.delegate as! AppDelegate
-        let context = appDelegate.persistentContainer.viewContext
-        let newAddress = NSEntityDescription.insertNewObject(forEntityName: "Address", into: context)
-        newAddress.setValue(addressToArchive._id, forKey: "id")
-        newAddress.setValue(addressToArchive._lattitude, forKey: "lattitude")
-        newAddress.setValue(addressToArchive._longitude, forKey: "longitude")
-        newAddress.setValue(addressToArchive._place_name, forKey: "place_name")
         
-        do {
-            try context.save()
-            print("Saving Address")
-        } catch {
-            print("Error during saving")
-        }
-        self.getAddressFromDatabase()
-        self.tableMenu.reloadData()
-    }
+    
 
     // Fermeture du clavier quand on clique sur done
     

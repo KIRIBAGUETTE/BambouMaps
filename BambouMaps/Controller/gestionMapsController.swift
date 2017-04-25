@@ -9,7 +9,7 @@
 import Foundation
 import Mapbox
 
-class PutPin : NSObject, MGLMapViewDelegate, CLLocationManagerDelegate {
+class gestionMapsController : NSObject, MGLMapViewDelegate, CLLocationManagerDelegate {
     
     // Positionnement d'une pin sur la carte
     let pin:MGLPointAnnotation = MGLPointAnnotation()

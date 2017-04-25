@@ -9,11 +9,11 @@
 import Foundation
 import Mapbox
 
-class gestionMaps {
+class gestionMapsView {
     
     // Configuration de la map
     
-    func gestMaps(mapView:MGLMapView) {
+    func configMaps(mapView:MGLMapView) {
         mapView.styleURL = MGLStyle.outdoorsStyleURL(withVersion: 9)
         mapView.showsUserLocation = true
     }

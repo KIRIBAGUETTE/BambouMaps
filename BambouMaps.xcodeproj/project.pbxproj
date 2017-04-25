@@ -13,6 +13,7 @@
 		523065591EAD164F0075ADD3 /* addressClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 523065581EAD164F0075ADD3 /* addressClass.swift */; };
 		5230655D1EAD25FF0075ADD3 /* TableViewCellAddress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5230655B1EAD25FF0075ADD3 /* TableViewCellAddress.swift */; };
 		5230655E1EAD25FF0075ADD3 /* TableViewCellAddress.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5230655C1EAD25FF0075ADD3 /* TableViewCellAddress.xib */; };
+		523065631EAD70900075ADD3 /* BambouMaps.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 523065611EAD70900075ADD3 /* BambouMaps.xcdatamodeld */; };
 		52B0B2971EAA6209008557EF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52B0B2961EAA6209008557EF /* AppDelegate.swift */; };
 		52B0B2991EAA6209008557EF /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52B0B2981EAA6209008557EF /* ViewController.swift */; };
 		52B0B29C1EAA6209008557EF /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 52B0B29A1EAA6209008557EF /* Main.storyboard */; };
@@ -47,6 +48,7 @@
 		523065581EAD164F0075ADD3 /* addressClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = addressClass.swift; sourceTree = "<group>"; };
 		5230655B1EAD25FF0075ADD3 /* TableViewCellAddress.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TableViewCellAddress.swift; path = "View/CELL ADDRESS/TableViewCellAddress.swift"; sourceTree = "<group>"; };
 		5230655C1EAD25FF0075ADD3 /* TableViewCellAddress.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = TableViewCellAddress.xib; path = "View/CELL ADDRESS/TableViewCellAddress.xib"; sourceTree = "<group>"; };
+		523065621EAD70900075ADD3 /* BambouMaps.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = BambouMaps.xcdatamodel; sourceTree = "<group>"; };
 		52B0B2931EAA6209008557EF /* BambouMaps.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BambouMaps.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		52B0B2961EAA6209008557EF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		52B0B2981EAA6209008557EF /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -127,6 +129,7 @@
 		52B0B2951EAA6209008557EF /* BambouMaps */ = {
 			isa = PBXGroup;
 			children = (
+				523065611EAD70900075ADD3 /* BambouMaps.xcdatamodeld */,
 				52B0B2C41EABAD0E008557EF /* Model */,
 				52B0B2C51EABAD20008557EF /* View */,
 				52B0B2C61EABAD2F008557EF /* Controller */,
@@ -396,6 +399,7 @@
 				523065571EAD10E40075ADD3 /* DeserialisationMapBox.swift in Sources */,
 				52B0B2C81EABAD7B008557EF /* MBClass.swift in Sources */,
 				52B0B2971EAA6209008557EF /* AppDelegate.swift in Sources */,
+				523065631EAD70900075ADD3 /* BambouMaps.xcdatamodeld in Sources */,
 				52B0B2CA1EABB6C0008557EF /* PutPin.swift in Sources */,
 				5230655D1EAD25FF0075ADD3 /* TableViewCellAddress.swift in Sources */,
 				523065551EAD07B00075ADD3 /* MAPBOXAPI.swift in Sources */,
@@ -672,6 +676,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		523065611EAD70900075ADD3 /* BambouMaps.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				523065621EAD70900075ADD3 /* BambouMaps.xcdatamodel */,
+			);
+			currentVersion = 523065621EAD70900075ADD3 /* BambouMaps.xcdatamodel */;
+			path = BambouMaps.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 52B0B28B1EAA6209008557EF /* Project object */;
 }

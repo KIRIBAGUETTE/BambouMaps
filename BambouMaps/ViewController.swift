@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreData
 import Mapbox
 import Alamofire
 import SwiftyJSON
@@ -30,6 +31,7 @@ class ViewController: UIViewController, MGLMapViewDelegate, CLLocationManagerDel
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.getAddressFromDatabase()
         
         let TableViewCellAddress = UINib(nibName: "TableViewCellAddress", bundle: nil)
         self.tableAddress.register(TableViewCellAddress, forCellReuseIdentifier: "ADDRESS")
@@ -39,7 +41,7 @@ class ViewController: UIViewController, MGLMapViewDelegate, CLLocationManagerDel
         self.textFieldAddress.delegate = self
         self.textFieldAddress.addTarget(self, action: #selector(self.textFieldDidChange(_:)), for: UIControlEvents.editingChanged)
         self.configLocation(MBox:MBox)
-        
+
         var position:CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: 48.8414, longitude: 2.2530)
         if MBox._locationManager.location != nil {
             position = (MBox._locationManager.location?.coordinate)!
@@ -50,6 +52,89 @@ class ViewController: UIViewController, MGLMapViewDelegate, CLLocationManagerDel
         self.PutPinClass.putAPinOnTheMap(mapView: self.mapView, position: position, title: "Your Position", subtitle: "This is your position")
     }
     
+    // Recuperer toutes les adresses dans la base de données
+    
+    func getAddressFromDatabase() {
+        print("Get Addresses")
+        let appDelegate:AppDelegate = UIApplication.shared.delegate as! AppDelegate
+        let context = appDelegate.persistentContainer.viewContext
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Address")
+        request.returnsObjectsAsFaults = false
+        do {
+            let results = try context.fetch(request)
+            if results.count > 0 {
+                for result in results as! [NSManagedObject] {
+                    let newAddress:addressClass = addressClass()
+                    if let id = result.value(forKey: "id") as? String {
+                        newAddress._id = id
+                    }
+                    if let longitude = result.value(forKey: "longitude") as? Double {
+                        newAddress._longitude = longitude
+                    }
+                    if let lattitude = result.value(forKey: "lattitude") as? Double {
+                        newAddress._lattitude = lattitude
+                    }
+                    if let place_name = result.value(forKey: "place_name") as? String {
+                        newAddress._place_name = place_name
+                        print(place_name)
+                    }
+                }
+            }
+        } catch {
+            print("Error during acces to the database")
+        }
+    }
+    
+    // Verifier a chaque entree si on a 15 entrées si oui on supprime la première
+    
+    func checkNumberOfAddressesInBdd() {
+        let appDelegate:AppDelegate = UIApplication.shared.delegate as! AppDelegate
+        let context = appDelegate.persistentContainer.viewContext
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Address")
+        request.returnsObjectsAsFaults = false
+        do {
+            let results = try context.fetch(request)
+            var i:Int = 0
+            if results.count >= 15 {
+                print("Delete Oldest Entry")
+                for result in results as! [NSManagedObject] {
+                    if i == 0 {
+                        context.delete(result)
+                        i = 1
+                    }
+                }
+            }
+        } catch {
+            print("ERROR")
+        }
+        do {
+            try context.save()
+        } catch {
+            print("Error")
+        }
+    }
+    
+    // Sauvegarder dans la BDD l'adresse que l'on a pointé
+    
+    func insertAddressInArchive(addressToArchive:addressClass) {
+        self.checkNumberOfAddressesInBdd()
+        let appDelegate:AppDelegate = UIApplication.shared.delegate as! AppDelegate
+        let context = appDelegate.persistentContainer.viewContext
+        let newAddress = NSEntityDescription.insertNewObject(forEntityName: "Address", into: context)
+        newAddress.setValue(addressToArchive._id, forKey: "id")
+        newAddress.setValue(addressToArchive._lattitude, forKey: "lattitude")
+        newAddress.setValue(addressToArchive._longitude, forKey: "longitude")
+        newAddress.setValue(addressToArchive._place_name, forKey: "place_name")
+        
+        do {
+            try context.save()
+            print("Saving Address")
+        } catch {
+            print("Error during saving")
+        }
+        
+    }
+    
     // Recherche de l'adresse quand on arrête de déplacer la caméra à la main
     
     func mapView(_ mapView: MGLMapView, regionDidChangeAnimated animated: Bool) {
@@ -57,6 +142,7 @@ class ViewController: UIViewController, MGLMapViewDelegate, CLLocationManagerDel
         self.getAddressFromMapBox(addressName: String(self.mapView.centerCoordinate.longitude) + "%2C" + String(self.mapView.centerCoordinate.latitude), types:"address", autocomplete:"false", limit:"1")
         if self.stockAddress.count > 0 {
             self.textFieldAddress.text = self.stockAddress[0]?._place_name
+            self.insertAddressInArchive(addressToArchive: self.stockAddress[0]!)
         }
         self.DidUserMovedMaps = 1
     }
@@ -82,6 +168,7 @@ class ViewController: UIViewController, MGLMapViewDelegate, CLLocationManagerDel
         self.textFieldAddress.resignFirstResponder()
         self.stockAddress.removeAll()
         self.tableAddress.isHidden = true
+        self.insertAddressInArchive(addressToArchive: self.stockAddress[indexPath.row]!)
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

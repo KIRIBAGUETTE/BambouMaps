@@ -8,7 +8,7 @@
 
 import Foundation
 
-class addressClass {
+class addressClass : NSObject {
     var _place_name:String!
     var _lattitude:Double!
     var _longitude:Double!
@@ -57,10 +57,11 @@ class addressClass {
         self._id = id
     }
     
-    init() {
+    override init() {
         self._place_name = ""
         self._longitude = 0
         self._lattitude = 0
         self._id = ""
     }
+
 }

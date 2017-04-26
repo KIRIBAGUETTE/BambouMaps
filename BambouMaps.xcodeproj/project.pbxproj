@@ -10,6 +10,7 @@
 		336082A14C8DD873439E891F /* Pods_BambouMaps.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5514C4F06C4D86ACA9CF238 /* Pods_BambouMaps.framework */; };
 		5202A3E71EAFBBBD00AD07BF /* gestionMapsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5202A3E61EAFBBBD00AD07BF /* gestionMapsView.swift */; };
 		5202A3EB1EAFCA1D00AD07BF /* gestionDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5202A3EA1EAFCA1D00AD07BF /* gestionDatabase.swift */; };
+		5202A3EE1EB0EAA700AD07BF /* Maps.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5202A3ED1EB0EAA700AD07BF /* Maps.swift */; };
 		523065551EAD07B00075ADD3 /* MAPBOXAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 523065541EAD07B00075ADD3 /* MAPBOXAPI.swift */; };
 		523065571EAD10E40075ADD3 /* DeserialisationMapBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 523065561EAD10E40075ADD3 /* DeserialisationMapBox.swift */; };
 		523065591EAD164F0075ADD3 /* addressClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 523065581EAD164F0075ADD3 /* addressClass.swift */; };
@@ -24,7 +25,6 @@
 		52B0B2AC1EAA6209008557EF /* BambouMapsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52B0B2AB1EAA6209008557EF /* BambouMapsTests.swift */; };
 		52B0B2B71EAA6209008557EF /* BambouMapsUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52B0B2B61EAA6209008557EF /* BambouMapsUITests.swift */; };
 		52B0B2C81EABAD7B008557EF /* MBClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52B0B2C71EABAD7B008557EF /* MBClass.swift */; };
-		52B0B2CA1EABB6C0008557EF /* gestionMapsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52B0B2C91EABB6C0008557EF /* gestionMapsController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,6 +47,7 @@
 /* Begin PBXFileReference section */
 		5202A3E61EAFBBBD00AD07BF /* gestionMapsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = gestionMapsView.swift; path = View/gestionMapsView.swift; sourceTree = "<group>"; };
 		5202A3EA1EAFCA1D00AD07BF /* gestionDatabase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = gestionDatabase.swift; path = Controller/gestionDatabase.swift; sourceTree = "<group>"; };
+		5202A3ED1EB0EAA700AD07BF /* Maps.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Maps.swift; path = Maps/Maps.swift; sourceTree = "<group>"; };
 		523065541EAD07B00075ADD3 /* MAPBOXAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MAPBOXAPI.swift; path = Model/MAPBOXAPI.swift; sourceTree = "<group>"; };
 		523065561EAD10E40075ADD3 /* DeserialisationMapBox.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DeserialisationMapBox.swift; path = Controller/DeserialisationMapBox.swift; sourceTree = "<group>"; };
 		523065581EAD164F0075ADD3 /* addressClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = addressClass.swift; sourceTree = "<group>"; };
@@ -67,7 +68,6 @@
 		52B0B2B61EAA6209008557EF /* BambouMapsUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BambouMapsUITests.swift; sourceTree = "<group>"; };
 		52B0B2B81EAA6209008557EF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		52B0B2C71EABAD7B008557EF /* MBClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MBClass.swift; path = Model/MBClass.swift; sourceTree = "<group>"; };
-		52B0B2C91EABB6C0008557EF /* gestionMapsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = gestionMapsController.swift; path = Controller/gestionMapsController.swift; sourceTree = "<group>"; };
 		D158C52E6CF99AF1D54DB91A /* Pods-BambouMaps.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BambouMaps.debug.xcconfig"; path = "Pods/Target Support Files/Pods-BambouMaps/Pods-BambouMaps.debug.xcconfig"; sourceTree = "<group>"; };
 		F5514C4F06C4D86ACA9CF238 /* Pods_BambouMaps.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BambouMaps.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F93A2A69742CEE351758B3E3 /* Pods-BambouMaps.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BambouMaps.release.xcconfig"; path = "Pods/Target Support Files/Pods-BambouMaps/Pods-BambouMaps.release.xcconfig"; sourceTree = "<group>"; };
@@ -99,6 +99,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5202A3EC1EB0EA8900AD07BF /* Maps */ = {
+			isa = PBXGroup;
+			children = (
+				5202A3ED1EB0EAA700AD07BF /* Maps.swift */,
+			);
+			name = Maps;
+			sourceTree = "<group>";
+		};
 		5230655A1EAD25DC0075ADD3 /* CELL ADDRESS */ = {
 			isa = PBXGroup;
 			children = (
@@ -133,6 +141,7 @@
 		52B0B2951EAA6209008557EF /* BambouMaps */ = {
 			isa = PBXGroup;
 			children = (
+				5202A3EC1EB0EA8900AD07BF /* Maps */,
 				523065611EAD70900075ADD3 /* BambouMaps.xcdatamodeld */,
 				52B0B2C41EABAD0E008557EF /* Model */,
 				52B0B2C51EABAD20008557EF /* View */,
@@ -187,7 +196,6 @@
 			isa = PBXGroup;
 			children = (
 				52B0B2981EAA6209008557EF /* ViewController.swift */,
-				52B0B2C91EABB6C0008557EF /* gestionMapsController.swift */,
 				523065561EAD10E40075ADD3 /* DeserialisationMapBox.swift */,
 				5202A3EA1EAFCA1D00AD07BF /* gestionDatabase.swift */,
 			);
@@ -402,11 +410,11 @@
 			files = (
 				523065591EAD164F0075ADD3 /* addressClass.swift in Sources */,
 				52B0B2991EAA6209008557EF /* ViewController.swift in Sources */,
+				5202A3EE1EB0EAA700AD07BF /* Maps.swift in Sources */,
 				523065571EAD10E40075ADD3 /* DeserialisationMapBox.swift in Sources */,
 				52B0B2C81EABAD7B008557EF /* MBClass.swift in Sources */,
 				52B0B2971EAA6209008557EF /* AppDelegate.swift in Sources */,
 				523065631EAD70900075ADD3 /* BambouMaps.xcdatamodeld in Sources */,
-				52B0B2CA1EABB6C0008557EF /* gestionMapsController.swift in Sources */,
 				5230655D1EAD25FF0075ADD3 /* TableViewCellAddress.swift in Sources */,
 				5202A3E71EAFBBBD00AD07BF /* gestionMapsView.swift in Sources */,
 				5202A3EB1EAFCA1D00AD07BF /* gestionDatabase.swift in Sources */,

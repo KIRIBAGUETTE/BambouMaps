@@ -14,7 +14,8 @@ import SwiftyJSON
 
 class ViewController: UIViewController, MGLMapViewDelegate, CLLocationManagerDelegate, UITextFieldDelegate {
 
-    @IBOutlet var mapView: MGLMapView!
+    @IBOutlet var mapView: UIView!
+    var MapModuleCLass:MapModule<MapBox>!
     @IBOutlet weak var menuView: UIView!
     @IBOutlet weak var textFieldAddress: UITextField!
     @IBOutlet weak var textFieldAddressConstraintTop: NSLayoutConstraint!
@@ -26,20 +27,21 @@ class ViewController: UIViewController, MGLMapViewDelegate, CLLocationManagerDel
     
     var stockAddress:[Int:addressClass] = [:]
     
-    let gestionMapsControllerClass:gestionMapsController = gestionMapsController()
     var gestionMapsViewClass:gestionMapsView = gestionMapsView()
     var gestionDatabaseClass:gestionDatabase = gestionDatabase()
     var sizeCell:CGFloat!
     var DidUserMovedMaps:Int = 1 // Permettre d'éviter qu'on voit la pin se déplacer lorsqu'un user cherche une adresse lointaine // 1 = PIN bouge / 0 = PIN ne bouge pas
     
     override func viewDidLoad() {
+        self.MapModuleCLass = MapModule(viewMaps: self.mapView, mapType: MapBox())
         super.viewDidLoad()
-        self.gestionDatabaseClass.getAddressFromDatabase()
         
+        self.gestionDatabaseClass.getAddressFromDatabase()
         let TableViewCellAddress = UINib(nibName: "TableViewCellAddress", bundle: nil)
         self.tableAddress.register(TableViewCellAddress, forCellReuseIdentifier: "ADDRESS")
         self.tableMenu.register(TableViewCellAddress, forCellReuseIdentifier: "ADDRESS")
         let MBox:MBClass = MBClass()
+        self.MapModuleCLass.map.mapView.delegate = self
         
         self.textFieldAddress.delegate = self
         self.textFieldAddress.addTarget(self, action: #selector(self.textFieldDidChange(_:)), for: UIControlEvents.editingChanged)
@@ -49,10 +51,8 @@ class ViewController: UIViewController, MGLMapViewDelegate, CLLocationManagerDel
         if MBox._locationManager.location != nil {
             position = (MBox._locationManager.location?.coordinate)!
         }
-        
-        self.mapView.setCenter(position, zoomLevel: 12, direction: 0, animated: false)
+        self.MapModuleCLass.map.centerCameraOnUser(latitude: position.latitude, longitude: position.longitude)
         self.gestConstraint()
-        self.gestionMapsViewClass.configMaps(mapView: mapView)
     }
     
     // Ouverture de l'historique des adresses
@@ -70,12 +70,12 @@ class ViewController: UIViewController, MGLMapViewDelegate, CLLocationManagerDel
     // Recherche de l'adresse quand on arrête de déplacer la caméra à la main
     
     func mapView(_ mapView: MGLMapView, regionDidChangeAnimated animated: Bool) {
-        self.getAddressFromMapBox(addressName: String(self.mapView.centerCoordinate.longitude) + "%2C" + String(self.mapView.centerCoordinate.latitude), types:"address", autocomplete:"false", limit:"1")
+        self.getAddressFromMapBox(addressName: String(self.MapModuleCLass.map.mapView.centerCoordinate.longitude) + "%2C" + String(self.MapModuleCLass.map.mapView.centerCoordinate.latitude), types:"address", autocomplete:"false", limit:"1")
         if self.stockAddress.count > 0 {
             self.textFieldAddress.text = self.stockAddress[0]?._place_name
             self.gestionDatabaseClass.insertAddressInArchive(addressToArchive: self.stockAddress[0]!)
             self.tableMenu.reloadData()
-            self.gestionMapsControllerClass.putAPinOnTheMap(mapView: self.mapView, position: self.mapView.centerCoordinate, title: self.textFieldAddress.text!, subtitle: "")
+            self.MapModuleCLass.map.putAPinOnTheMap(latitude: self.MapModuleCLass.map.mapView.centerCoordinate.latitude, longitude: self.MapModuleCLass.map.mapView.centerCoordinate.longitude, title: self.textFieldAddress.text!, subtitle: "")
         }
         self.DidUserMovedMaps = 1
     }
@@ -84,17 +84,16 @@ class ViewController: UIViewController, MGLMapViewDelegate, CLLocationManagerDel
     
     func mapViewRegionIsChanging(_ mapView: MGLMapView) {
         if self.DidUserMovedMaps == 1 {
-            self.gestionMapsControllerClass.putAPinOnTheMap(mapView: self.mapView, position: self.mapView.centerCoordinate, title: self.textFieldAddress.text!, subtitle: "")
+            self.MapModuleCLass.map.putAPinOnTheMap(latitude: self.MapModuleCLass.map.mapView.centerCoordinate.latitude, longitude: self.MapModuleCLass.map.mapView.centerCoordinate.longitude, title: self.textFieldAddress.text!, subtitle: "")
         }
     }
     
     // Déplacer la caméra lorsqu'on a choisit une adresse
     
     func moveCameraAndPutAPin(stockAddress:[Int:addressClass], id: Int) {
-        let position:CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: (stockAddress[id]?._lattitude)!, longitude: (stockAddress[id]?._longitude)!)
-        self.gestionMapsControllerClass.putAPinOnTheMap(mapView: self.mapView, position: position, title: (stockAddress[id]?._place_name)!, subtitle: "")
-        let camera = MGLMapCamera(lookingAtCenter: position, fromDistance: 4500, pitch: 15, heading: 180)
-        mapView.setCamera(camera, withDuration: 3, animationTimingFunction: CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut))
+        
+        self.MapModuleCLass.map.putAPinOnTheMap(latitude: (stockAddress[id]?._lattitude)!, longitude: (stockAddress[id]?._longitude)!, title: (stockAddress[id]?._place_name)!, subtitle: "")
+        self.MapModuleCLass.map.moveCamera(latitude: (stockAddress[id]?._lattitude)!, longitude: (stockAddress[id]?._longitude)!, title: (stockAddress[id]?._place_name)!, subtitle: "")
         self.textFieldAddress.text = (stockAddress[id]?._place_name)!
         self.textFieldAddress.resignFirstResponder()
         self.gestionDatabaseClass.insertAddressInArchive(addressToArchive: stockAddress[id]!)
@@ -170,18 +169,18 @@ class ViewController: UIViewController, MGLMapViewDelegate, CLLocationManagerDel
                               limit:String) {
         
         let DeserialisationMapBoxClass:DeserialisationMapBox = DeserialisationMapBox()
-        
+
         let request:String = MAPBOXAPI.MAPBOX_AUTOCOMPLETE.rawValue + addressName.replacingOccurrences(of: " ", with: "%20") + ".json?access_token=" + MAPBOXAPI.KEYDEV.rawValue + "&types=" + types + "&autocomplete=" + autocomplete + "&limit=" + limit
         Alamofire.request(request, method: .get).responseJSON { response in
             if response.result.isSuccess {
                 if response.response?.statusCode == 200 {
                     self.stockAddress = DeserialisationMapBoxClass.DeserialisationMapBoxAutocomplete(Json: JSON(response.result.value!))
-                    if self.stockAddress.count > 0 && autocomplete == "true"{
+                    if self.stockAddress.count > 1 && autocomplete == "true"{
                         self.tableAddress.reloadData()
                         self.gestConstraint()
                         self.tableAddress.isHidden = false
-                    } else {
-                        self.gestionMapsControllerClass.putAPinOnTheMap(mapView: self.mapView, position: self.mapView.centerCoordinate, title: (self.stockAddress[0]?._place_name)!, subtitle: "")
+                    } else if self.stockAddress.count == 1 {
+                        self.MapModuleCLass.map.putAPinOnTheMap(latitude: (self.stockAddress[0]?._lattitude)!, longitude:(self.stockAddress[0]?._longitude)!, title: (self.stockAddress[0]?._place_name)!, subtitle: "")
                         self.textFieldAddress.text = self.stockAddress[0]?._place_name
                         self.tableAddress.isHidden = true
                     }
@@ -203,7 +202,6 @@ class ViewController: UIViewController, MGLMapViewDelegate, CLLocationManagerDel
             self.tableAddress.isHidden = true
         }
     }
-
     
     // Gestion des contraintes graphiques
     
@@ -233,12 +231,9 @@ class ViewController: UIViewController, MGLMapViewDelegate, CLLocationManagerDel
     // Action à effectuer après la fin du chargement de la vue
     
     override func viewDidAppear(_ animated: Bool) {
-        let camera = MGLMapCamera(lookingAtCenter: mapView.centerCoordinate, fromDistance: 4500, pitch: 15, heading: 180)
-        mapView.setCamera(camera, withDuration: 3, animationTimingFunction: CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut))
+        let camera = MGLMapCamera(lookingAtCenter: self.MapModuleCLass.map.mapView.centerCoordinate, fromDistance: 4500, pitch: 15, heading: 180)
+        self.MapModuleCLass.map.mapView.setCamera(camera, withDuration: 3, animationTimingFunction: CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut))
     }
-    
-        
-    
 
     // Fermeture du clavier quand on clique sur done
     

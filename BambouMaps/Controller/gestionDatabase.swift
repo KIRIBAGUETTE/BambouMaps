@@ -16,7 +16,6 @@ class gestionDatabase {
     // Recuperer toutes les adresses dans la base de données
     
     func getAddressFromDatabase() {
-        print("Get Addresses")
         let appDelegate:AppDelegate = UIApplication.shared.delegate as! AppDelegate
         let context = appDelegate.persistentContainer.viewContext
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Address")
@@ -58,7 +57,6 @@ class gestionDatabase {
             let results = try context.fetch(request)
             var i:Int = 0
             if results.count >= 15 {
-                print("Delete Oldest Entry")
                 for result in results as! [NSManagedObject] {
                     if i == 0 {
                         context.delete(result)
@@ -90,7 +88,6 @@ class gestionDatabase {
         
         do {
             try context.save()
-            print("Saving Address")
         } catch {
             print("Error during saving")
         }
